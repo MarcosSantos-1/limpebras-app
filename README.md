@@ -50,10 +50,6 @@ npm run dev
 
 ### 3. Acesso
 
-- Frontend: http://localhost:3000
-- Backend: http://localhost:3001
-- Login padrão: `marcos.silva` / `2020`
-
 ## 📁 Estrutura do Projeto
 
 ```
