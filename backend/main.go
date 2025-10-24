@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"strings"
 
 	"relatorios-backend/internal/config"
 	"relatorios-backend/internal/database"
@@ -40,8 +41,16 @@ func main() {
 	router := gin.Default()
 
 	// Configurar CORS
+	corsOrigins := []string{"http://localhost:3000"}
+	if corsEnv := os.Getenv("CORS_ORIGINS"); corsEnv != "" {
+		// Dividir por vírgula e adicionar cada origem
+		for _, origin := range strings.Split(corsEnv, ",") {
+			corsOrigins = append(corsOrigins, strings.TrimSpace(origin))
+		}
+	}
+	
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000", "https://your-frontend-domain.com"},
+		AllowOrigins:     corsOrigins,
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
