@@ -109,6 +109,7 @@ export default function NovoFeirasPage() {
       
       const rel: RegistroRelatorio = {
         id,
+        title: assunto, // Usar o assunto como título
         tipoServico: "FEIRAS",
         assunto,
         dataInicio: dataInicioISO,
