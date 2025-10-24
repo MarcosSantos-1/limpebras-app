@@ -1,0 +1,15 @@
+{
+  "name": "relatorios-backend",
+  "version": "1.0.0",
+  "description": "Backend para geração de PDFs com Puppeteer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "puppeteer": "^21.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
