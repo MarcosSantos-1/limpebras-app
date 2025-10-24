@@ -137,7 +137,7 @@ export function Navbar() {
                       {user?.name?.charAt(0).toUpperCase() || 'U'}
                     </div>
                     <div>
-                      <div className="font-semibold text-zinc-800 dark:text-zinc-200">{user?.nome || 'Usuário'}</div>
+                      <div className="font-semibold text-zinc-800 dark:text-zinc-200">{user?.name || 'Usuário'}</div>
                       <div className="text-sm text-zinc-500 dark:text-zinc-400">{user?.email || 'email@exemplo.com'}</div>
                       <div className="text-xs text-purple-600 dark:text-purple-400 font-semibold">
                         {user?.role === 'admin' ? '👑 Administrador' : '👤 Usuário'}
