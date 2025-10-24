@@ -184,3 +184,36 @@ func (h *RelatorioHandler) GenerateBatchPDF(c *gin.Context) {
 	// Por enquanto, retornar erro pois batch PDF é mais complexo
 	c.JSON(http.StatusNotImplemented, gin.H{"error": "Geração de PDF em lote ainda não implementada"})
 }
+
+// GenerateTestPDF - Rota pública para testar geração de PDF (REMOVER EM PRODUÇÃO)
+func (h *RelatorioHandler) GenerateTestPDF(c *gin.Context) {
+	// Criar um relatório de teste
+	testRelatorio := &models.Relatorio{
+		ID:           "test-123",
+		Title:        "Relatório de Teste",
+		TipoServico:  "MUTIRAO",
+		Sub:          "CENTRO",
+		Local:        "Praça da Liberdade",
+		Endereco:     "Rua da Liberdade, 123",
+		Descricao:    "Este é um relatório de teste para verificar se a geração de PDF está funcionando corretamente.",
+		Data:         "2025-01-24",
+		Fotos: []models.Foto{
+			{URL: "https://via.placeholder.com/300x200?text=Foto+1", Descricao: "Foto de teste 1"},
+			{URL: "https://via.placeholder.com/300x200?text=Foto+2", Descricao: "Foto de teste 2"},
+		},
+	}
+
+	// Gerar PDF
+	pdfBytes, err := h.pdfService.GeneratePDF(testRelatorio)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao gerar PDF: " + err.Error()})
+		return
+	}
+
+	// Definir headers para download
+	c.Header("Content-Type", "application/pdf")
+	c.Header("Content-Disposition", "attachment; filename=relatorio_teste.pdf")
+	c.Header("Content-Length", strconv.Itoa(len(pdfBytes)))
+
+	c.Data(http.StatusOK, "application/pdf", pdfBytes)
+}

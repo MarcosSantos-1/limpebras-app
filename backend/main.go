@@ -70,6 +70,9 @@ func main() {
 	router.POST("/api/auth/login", authHandler.Login)
 	router.POST("/api/auth/register", authHandler.Register)
 	router.POST("/api/auth/logout", authHandler.Logout)
+	
+	// Rota de teste pública para PDF (REMOVER EM PRODUÇÃO)
+	router.POST("/api/test/pdf", relatorioHandler.GenerateTestPDF)
 
 	// Rotas protegidas
 	protected := router.Group("/api")
