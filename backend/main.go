@@ -68,28 +68,22 @@ func main() {
 	authHandler := handlers.NewAuthHandler(authService)
 	relatorioHandler := handlers.NewRelatorioHandler(relatorioService, pdfService)
 
-	// Rotas públicas
-	router.POST("/api/auth/login", authHandler.Login)
-	router.POST("/api/auth/register", authHandler.Register)
-	router.POST("/api/auth/logout", authHandler.Logout)
-	
-	// Rota de teste pública para PDF (REMOVER EM PRODUÇÃO)
-	router.POST("/api/test/pdf", relatorioHandler.GenerateTestPDF)
-
-	// Rotas protegidas
-	protected := router.Group("/api")
-	protected.Use(middleware.AuthMiddleware(authService))
+	// Todas as rotas são públicas (SEM AUTENTICAÇÃO)
+	api := router.Group("/api")
 	{
 		// Relatórios
-		protected.GET("/relatorios", relatorioHandler.GetRelatorios)
-		protected.GET("/relatorios/:id", relatorioHandler.GetRelatorio)
-		protected.POST("/relatorios", relatorioHandler.CreateRelatorio)
-		protected.PUT("/relatorios/:id", relatorioHandler.UpdateRelatorio)
-		protected.DELETE("/relatorios/:id", relatorioHandler.DeleteRelatorio)
+		api.GET("/relatorios", relatorioHandler.GetRelatorios)
+		api.GET("/relatorios/:id", relatorioHandler.GetRelatorio)
+		api.POST("/relatorios", relatorioHandler.CreateRelatorio)
+		api.PUT("/relatorios/:id", relatorioHandler.UpdateRelatorio)
+		api.DELETE("/relatorios/:id", relatorioHandler.DeleteRelatorio)
 		
 		// Geração de PDF
-		protected.POST("/relatorios/:id/pdf", relatorioHandler.GeneratePDF)
-		protected.POST("/relatorios/pdf/batch", relatorioHandler.GenerateBatchPDF)
+		api.POST("/relatorios/:id/pdf", relatorioHandler.GeneratePDF)
+		api.POST("/relatorios/pdf/batch", relatorioHandler.GenerateBatchPDF)
+		
+		// Rota de teste para PDF
+		api.POST("/test/pdf", relatorioHandler.GenerateTestPDF)
 	}
 
 	// Health check

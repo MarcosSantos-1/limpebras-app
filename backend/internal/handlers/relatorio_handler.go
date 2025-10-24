@@ -25,13 +25,7 @@ func NewRelatorioHandler(relatorioService *services.RelatorioService, pdfService
 }
 
 func (h *RelatorioHandler) GetRelatorios(c *gin.Context) {
-	userID := c.GetString("user_id")
-	if userID == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Usuário não autenticado"})
-		return
-	}
-
-	// Retornar todos os relatórios, não apenas os do usuário
+	// Retornar todos os relatórios (SEM AUTENTICAÇÃO)
 	relatorios, err := h.relatorioService.GetAllRelatorios()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -58,12 +52,6 @@ func (h *RelatorioHandler) GetRelatorio(c *gin.Context) {
 }
 
 func (h *RelatorioHandler) CreateRelatorio(c *gin.Context) {
-	userID := c.GetString("user_id")
-	if userID == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Usuário não autenticado"})
-		return
-	}
-
 	var req models.CreateRelatorioRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Erro ao processar dados: " + err.Error()})
@@ -71,9 +59,9 @@ func (h *RelatorioHandler) CreateRelatorio(c *gin.Context) {
 	}
 
 	// Log para debug
-	fmt.Printf("Criando relatório para usuário %s: %+v\n", userID, req)
+	fmt.Printf("Criando relatório: %+v\n", req)
 
-	relatorio, err := h.relatorioService.CreateRelatorio(userID, req)
+	relatorio, err := h.relatorioService.CreateRelatorio("system", req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao criar relatório: " + err.Error()})
 		return
@@ -89,19 +77,13 @@ func (h *RelatorioHandler) UpdateRelatorio(c *gin.Context) {
 		return
 	}
 
-	userID := c.GetString("user_id")
-	if userID == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Usuário não autenticado"})
-		return
-	}
-
 	var req models.UpdateRelatorioRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	relatorio, err := h.relatorioService.UpdateRelatorio(id, userID, req)
+	relatorio, err := h.relatorioService.UpdateRelatorio(id, "system", req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -117,13 +99,7 @@ func (h *RelatorioHandler) DeleteRelatorio(c *gin.Context) {
 		return
 	}
 
-	userID := c.GetString("user_id")
-	if userID == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Usuário não autenticado"})
-		return
-	}
-
-	err := h.relatorioService.DeleteRelatorio(id, userID)
+	err := h.relatorioService.DeleteRelatorio(id, "system")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -136,12 +112,6 @@ func (h *RelatorioHandler) GeneratePDF(c *gin.Context) {
 	id := c.Param("id")
 	if id == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "ID do relatório é obrigatório"})
-		return
-	}
-
-	userID := c.GetString("user_id")
-	if userID == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Usuário não autenticado"})
 		return
 	}
 
@@ -170,11 +140,6 @@ func (h *RelatorioHandler) GeneratePDF(c *gin.Context) {
 }
 
 func (h *RelatorioHandler) GenerateBatchPDF(c *gin.Context) {
-	userID := c.GetString("user_id")
-	if userID == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Usuário não autenticado"})
-		return
-	}
 
 	var req models.GenerateBatchPDFRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
