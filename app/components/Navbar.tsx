@@ -55,6 +55,16 @@ export function Navbar() {
             ))}
           </div>
 
+          {/* Status do Sistema */}
+          <div className="hidden md:flex items-center space-x-4">
+            <div className="flex items-center space-x-2 px-3 py-2 bg-green-100 dark:bg-green-900 rounded-lg">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <span className="text-sm font-medium text-green-700 dark:text-green-300">
+                Sistema Online
+              </span>
+            </div>
+          </div>
+
           {/* Mobile menu button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -85,6 +95,16 @@ export function Navbar() {
                   {item.label}
                 </Link>
               ))}
+            </div>
+            
+            {/* Mobile Status */}
+            <div className="mt-4 pt-4 border-t border-zinc-200 dark:border-zinc-800">
+              <div className="flex items-center space-x-2 px-3 py-2 bg-green-100 dark:bg-green-900 rounded-lg">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-sm font-medium text-green-700 dark:text-green-300">
+                  Sistema Online
+                </span>
+              </div>
             </div>
           </div>
         )}
