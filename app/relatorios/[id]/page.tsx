@@ -66,7 +66,7 @@ export default function RelatorioDetalhePage({ params }: { params: Promise<{ id:
       const pdfBlob = await relatoriosService.generatePDF(rel.id);
 
       // Extrair nome do arquivo
-      let fileName = `relatorio-${exportType}-${rel.id}.pdf`;
+      const fileName = `relatorio-${exportType}-${rel.id}.pdf`;
 
       // Download do arquivo
       const url = window.URL.createObjectURL(pdfBlob);
