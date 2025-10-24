@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"time"
 
 	"relatorios-backend/internal/models"
 	"relatorios-backend/internal/services"
