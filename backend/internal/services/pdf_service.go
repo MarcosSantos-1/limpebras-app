@@ -7,7 +7,6 @@ import (
 	"html/template"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"strings"
 	"time"
 
