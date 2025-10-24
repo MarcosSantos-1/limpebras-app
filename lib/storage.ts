@@ -99,13 +99,13 @@ export async function listReports(): Promise<ReportSummary[]> {
     // Converter Relatorio para ReportSummary
     return data.relatorios.map((rel: Relatorio) => ({
       id: rel.id,
-      title: rel.title,
-      data: rel.data || rel.dataInicio || new Date().toISOString().split('T')[0],
+      title: 'title' in rel ? rel.title : 'assunto' in rel ? rel.assunto : 'Nome do Relatório',
+      data: ('data' in rel ? rel.data : 'dataInicio' in rel ? rel.dataInicio : new Date().toISOString().split('T')[0]),
       tipoServico: rel.tipoServico,
-      sub: rel.sub,
-      local: rel.local,
-      endereco: rel.endereco,
-      fotoCount: rel.fotos ? rel.fotos.length : 0
+      sub: 'sub' in rel ? rel.sub : undefined,
+      local: 'local' in rel ? rel.local : undefined,
+      endereco: 'endereco' in rel ? rel.endereco : undefined,
+      fotoCount: 'fotos' in rel ? rel.fotos.length : 0
     }));
   } catch (error) {
     console.error('Erro ao listar relatórios:', error);
@@ -132,21 +132,21 @@ export async function saveReport(relatorio: Relatorio): Promise<Relatorio> {
     // Converter dados do frontend para o formato do backend
     const backendData = {
       tipoServico: relatorio.tipoServico,
-      title: relatorio.title,
-      data: relatorio.data,
-      dataInicio: relatorio.dataInicio,
-      dataTermino: relatorio.dataTermino,
-      sub: relatorio.sub,
-      local: relatorio.local,
-      endereco: relatorio.endereco,
-      descricao: relatorio.descricao,
-      assunto: relatorio.assunto,
-      frequencia: relatorio.frequencia,
-      peso: relatorio.peso,
-      quantitativo: relatorio.quantitativo,
-      secoes: relatorio.secoes,
-      fotos: relatorio.fotos,
-      servicos: relatorio.servicos
+      title: 'title' in relatorio ? relatorio.title : 'assunto' in relatorio ? relatorio.assunto : 'Nome do Relatório',
+      data: 'data' in relatorio ? relatorio.data : undefined,
+      dataInicio: 'dataInicio' in relatorio ? relatorio.dataInicio : undefined,
+      dataTermino: 'dataTermino' in relatorio ? relatorio.dataTermino : undefined,
+      sub: 'sub' in relatorio ? relatorio.sub : undefined,
+      local: 'local' in relatorio ? relatorio.local : undefined,
+      endereco: 'endereco' in relatorio ? relatorio.endereco : undefined,
+      descricao: 'descricao' in relatorio ? relatorio.descricao : undefined,
+      assunto: 'assunto' in relatorio ? relatorio.assunto : undefined,
+      frequencia: 'frequencia' in relatorio ? relatorio.frequencia : undefined,
+      peso: 'peso' in relatorio ? relatorio.peso : undefined,
+      quantitativo: 'quantitativo' in relatorio ? relatorio.quantitativo : undefined,
+      secoes: 'secoes' in relatorio ? relatorio.secoes : undefined,
+      fotos: 'fotos' in relatorio ? relatorio.fotos : undefined,
+      servicos: 'servicos' in relatorio ? relatorio.servicos : undefined
     };
 
     const response = await apiRequest('/relatorios', {

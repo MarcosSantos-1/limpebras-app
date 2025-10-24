@@ -21,7 +21,7 @@
  */
 
 import puppeteer from 'puppeteer-core';
-import { getPuppeteerConfig } from '@/lib/puppeteer-config';
+import { getPuppeteerConfig } from '../../lib/puppeteer-config';
 
 // Importar puppeteer completo para desenvolvimento
 let puppeteerDev: any = null;

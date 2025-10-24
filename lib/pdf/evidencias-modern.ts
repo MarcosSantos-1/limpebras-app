@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer-core';
 import { getPuppeteerConfig } from '@/lib/puppeteer-config';
-import type { Relatorio, RegistroRelatorio, RevitalizacaoRelatorio } from '@/lib/types';
+import type { Relatorio, RegistroRelatorio, RevitalizacaoRelatorio, EventosRelatorio } from '@/lib/types';
 import { SUB_REGIOES, TIPOS_SERVICO, TITULOS_RELATORIOS } from '@/lib/types';
 import { getImageUrls } from './image-loader';
 import { formatPeriodForServicePage } from '@/lib/utils';
@@ -33,7 +33,7 @@ function formatDateForCover(date: string | Date): string {
 }
 
 // Função para gerar HTML do relatório de eventos
-function generateEventosHTML(rel: Relatorio): string {
+function generateEventosHTML(rel: EventosRelatorio): string {
   const images = getImageUrls();
   
   return `
@@ -232,8 +232,8 @@ function generateEventosHTML(rel: Relatorio): string {
     <!-- Capa -->
     <div class="page cover">
         <h1>RELATÓRIO DE EVENTOS</h1>
-        <h2>${SUB_REGIOES[rel.sub] || rel.sub}</h2>
-        <div class="date">${formatDateForCover(rel.dataInicio || rel.data)}</div>
+        <h2>${SUB_REGIOES[rel.sub as keyof typeof SUB_REGIOES] || rel.sub}</h2>
+        <div class="date">${formatDateForCover(rel.dataInicio)}</div>
         <img src="${images.logo}" alt="Logo" class="logo">
     </div>
     
@@ -855,7 +855,7 @@ function generateEvidenciasHTML(rel: Relatorio): string {
         <div class="cover-logo"></div>
         <div class="cover-content">
             <h1 class="cover-title">RELATÓRIO DE EVIDÊNCIAS</h1>
-            <div class="cover-date">${formatDateForCover(rel.tipoServico === 'DDS' ? rel.dataInicio : ('data' in rel ? rel.data : rel.dataInicio))}</div>
+            <div class="cover-date">${formatDateForCover(('data' in rel ? rel.data : 'dataInicio' in rel ? rel.dataInicio : ''))}</div>
         </div>
     </div>
     
@@ -1064,7 +1064,7 @@ export async function exportEvidenciasPdf(rel: Relatorio): Promise<Uint8Array> {
 }
 
 // Função para exportar PDF de eventos
-export async function exportEventosPdf(rel: Relatorio): Promise<Uint8Array> {
+export async function exportEventosPdf(rel: EventosRelatorio): Promise<Uint8Array> {
   console.log('🎯 Iniciando exportEventosPdf para:', rel.tipoServico);
   
   const config = await getPuppeteerConfig();

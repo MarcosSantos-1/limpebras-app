@@ -19,6 +19,7 @@ export type TipoServico =
   | "VARRICAO_MECANIZADA"
   | "FEIRAS"
   | "EVENTOS"
+  | "MONUMENTOS"
   | "ROTINEIROS";
 
 export const TIPOS_SERVICO = {

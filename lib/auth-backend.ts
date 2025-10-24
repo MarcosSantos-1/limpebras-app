@@ -66,7 +66,7 @@ export function useAuth(): AuthState {
           console.error('Token inválido:', error);
           // Token inválido, limpar dados
           localStorage.removeItem('auth_token');
-          authService.clearToken();
+          // Token já foi removido do localStorage acima
           setAuthState(prev => ({
             ...prev,
             isAuthenticated: false,

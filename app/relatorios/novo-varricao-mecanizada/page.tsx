@@ -99,28 +99,30 @@ export default function NovoVarricaoMecanizadaPage() {
 
     setSaving(true);
 
+    // Preparar dados do relatório fora do try/catch
+    const now = Date.now();
+    const id = uuidv4();
+    
+    // Converter datas para formato ISO
+    const dataInicioISO = dataInicio.toISOString().split('T')[0];
+    const dataFimISO = dataFim.toISOString().split('T')[0];
+    
+    const rel: RegistroRelatorio = {
+      id,
+      title: assunto, // Usar o assunto como título
+      tipoServico: "VARRICAO_MECANIZADA",
+      assunto,
+      dataInicio: dataInicioISO,
+      dataTermino: dataFimISO,
+      sub,
+      local,
+      descricao,
+      fotos: fotos.map(url => ({ url, descricao: assunto })),
+      createdAt: now,
+      updatedAt: now,
+    };
+
     try {
-      const now = Date.now();
-      const id = uuidv4();
-      
-      // Converter datas para formato ISO
-      const dataInicioISO = dataInicio.toISOString().split('T')[0];
-      const dataFimISO = dataFim.toISOString().split('T')[0];
-      
-      const rel: RegistroRelatorio = {
-        id,
-        tipoServico: "VARRICAO_MECANIZADA",
-        assunto,
-        dataInicio: dataInicioISO,
-        dataTermino: dataFimISO,
-        sub,
-        local,
-        descricao,
-        fotos: fotos.map(url => ({ url, descricao: assunto })),
-        createdAt: now,
-        updatedAt: now,
-      };
-      
       await upsertReport(rel);
       toast.success("Relatório salvo com sucesso!");
       window.location.href = `/relatorios`;

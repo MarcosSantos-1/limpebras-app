@@ -123,7 +123,7 @@ export default function UploadPage() {
                             <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
                               {doc.categoria.replace('_', ' ')}
                             </span>
-                            {doc.tags?.map(tag => (
+                            {doc.tags?.map((tag: string) => (
                               <span key={tag} className="px-2 py-1 bg-zinc-100 text-zinc-800 rounded-full text-xs">
                                 {tag}
                               </span>
